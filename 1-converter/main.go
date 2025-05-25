@@ -15,7 +15,7 @@ func main() {
 
 	baseCurrency, convertCurrency, money := getConvertedParams()
 
-	res := convert(money, convertCurrency, baseCurrency)
+	res := convert(money, baseCurrency, convertCurrency)
 
 	fmt.Printf("%.2f %s => %.2f %s", money, baseCurrency, res, convertCurrency)
 }
@@ -38,7 +38,7 @@ func getConvertedParams() (string, string, float64) {
 func inputBaseCurrency(supMessage string) string {
 	var baseCurrency string
 	for {
-		fmt.Printf("Input base currency.\n%s", supMessage)
+		fmt.Printf("Input base currency. %s\n", supMessage)
 		_, err := fmt.Scanf("%s", &baseCurrency)
 
 		if err != nil {
@@ -47,7 +47,7 @@ func inputBaseCurrency(supMessage string) string {
 		}
 
 		if !slices.Contains(currencys, baseCurrency) {
-			fmt.Println("Unsopported currency")
+			fmt.Println("Unsupported currency")
 			continue
 		}
 		return baseCurrency
@@ -57,7 +57,7 @@ func inputBaseCurrency(supMessage string) string {
 func inputTargetCurrency(supMessage string, baseCurrency string) string {
 	var convertCurrency string
 	for {
-		fmt.Printf("Input convert currency.\n%s", supMessage)
+		fmt.Printf("Input convert currency. %s\n", supMessage)
 		_, err := fmt.Scanf("%s", &convertCurrency)
 
 		if err != nil {
@@ -66,7 +66,7 @@ func inputTargetCurrency(supMessage string, baseCurrency string) string {
 		}
 
 		if !slices.Contains(currencys, convertCurrency) || convertCurrency == baseCurrency {
-			fmt.Println("Unsopported currency")
+			fmt.Println("Unsupported currency")
 			continue
 		}
 		return convertCurrency
@@ -79,7 +79,12 @@ func inputAmount() float64 {
 
 	for {
 		fmt.Println("Input amount of money: ")
-		fmt.Scanf("%f", &money)
+		_, err := fmt.Scanf("%f", &money)
+
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
 
 		if money <= 0 {
 			fmt.Println("Incorrect money amount")
@@ -90,7 +95,7 @@ func inputAmount() float64 {
 	}
 }
 
-func convert(money float64, convertCurrency string, baseCurrency string) float64 {
+func convert(money float64, baseCurrency string, convertCurrency string) float64 {
 	switch {
 	case baseCurrency == "USD" && convertCurrency == "RUB":
 		return money * USDTORUB
