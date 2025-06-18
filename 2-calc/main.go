@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -79,7 +80,7 @@ func avg(nums []int) int {
 
 	num = sum(nums)
 
-	return num / len(nums)
+	return int(num / len(nums))
 }
 
 func sum(nums []int) int {
@@ -93,6 +94,8 @@ func sum(nums []int) int {
 }
 
 func med(nums []int) int {
+	sort.Ints(nums)
+
 	indx := len(nums) / 2
 
 	return nums[indx]
