@@ -11,6 +11,15 @@ const USDTOEUR = 0.88
 const USDTORUB = 79.86
 const EURTORUB = (1 / USDTOEUR) * USDTORUB
 
+var convertMap = map[string]float64{
+	"USD:EUR": USDTOEUR,
+	"USD:RUB": USDTORUB,
+	"EUR:USD": (1 / USDTOEUR),
+	"EUR:RUB": EURTORUB,
+	"RUB:USD": (1 / USDTORUB),
+	"RUB:EUR": (1 / EURTORUB),
+}
+
 func main() {
 
 	baseCurrency, convertCurrency, money := getConvertedParams()
@@ -96,20 +105,6 @@ func inputAmount() float64 {
 }
 
 func convert(money float64, baseCurrency string, convertCurrency string) float64 {
-	switch {
-	case baseCurrency == "USD" && convertCurrency == "RUB":
-		return money * USDTORUB
-	case baseCurrency == "USD" && convertCurrency == "EUR":
-		return money * USDTOEUR
-	case baseCurrency == "EUR" && convertCurrency == "USD":
-		return money * (1 / USDTOEUR)
-	case baseCurrency == "EUR" && convertCurrency == "RUB":
-		return money * EURTORUB
-	case baseCurrency == "RUB" && convertCurrency == "USD":
-		return money * (1 / USDTORUB)
-	case baseCurrency == "RUB" && convertCurrency == "EUR":
-		return money * (1 / EURTORUB)
-	default:
-		return money
-	}
+	key := fmt.Sprintf("%s:%s", baseCurrency, convertCurrency)
+	return money * convertMap[key]
 }
