@@ -13,7 +13,7 @@ func main() {
 
 	res := calculateOperation(op, nums)
 
-	fmt.Printf("Calculation result:%d", res)
+	fmt.Printf("Calculation result:%f", res)
 }
 
 func inputOperation() string {
@@ -62,7 +62,7 @@ func stringsToInts(strings []string) ([]int, error) {
 	return nums, nil
 }
 
-func calculateOperation(op string, nums []int) int {
+func calculateOperation(op string, nums []int) float64 {
 	switch op {
 	case "AVG":
 		return avg(nums)
@@ -71,32 +71,35 @@ func calculateOperation(op string, nums []int) int {
 	case "MED":
 		return med(nums)
 	default:
-		return nums[0]
+		return float64(nums[0])
 	}
 }
 
-func avg(nums []int) int {
-	var num int
+func avg(nums []int) float64 {
+	var num float64
 
 	num = sum(nums)
 
-	return int(num / len(nums))
+	return float64(num / float64(len(nums)))
 }
 
-func sum(nums []int) int {
+func sum(nums []int) float64 {
 	var sum int
 
 	for _, value := range nums {
 		sum += value
 	}
 
-	return sum
+	return float64(sum)
 }
 
-func med(nums []int) int {
+func med(nums []int) float64 {
 	sort.Ints(nums)
-
 	indx := len(nums) / 2
 
-	return nums[indx]
+	if len(nums)%2 == 0 {
+		return float64(float64(nums[indx]+nums[indx-1]) / 2)
+	}
+
+	return float64(nums[indx])
 }
