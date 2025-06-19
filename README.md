@@ -19,3 +19,9 @@ Folder 1-converter
     * Calculate operation with input numbers
 
 Folder 2-calc
+
+## Task 3
+* Create app
+* Create base struct
+
+Folder 3-struct
