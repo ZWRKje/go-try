@@ -10,7 +10,7 @@ type Bin struct {
 }
 
 type BinList struct {
-	bins []Bin
+	Bins []Bin
 }
 
 func NewBin(id string, private bool, createdAt time.Time, name string) *Bin {

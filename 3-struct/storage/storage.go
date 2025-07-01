@@ -10,15 +10,15 @@ import (
 )
 
 type Storage struct {
-	Bins      bins.BinList `json:"bins"`
-	UpdatedAt time.Time    `json:"updatedAt"`
+	Bins      *bins.BinList `json:"bins"`
+	UpdatedAt time.Time     `json:"updatedAt"`
 }
 
 func NewStorage() *Storage {
 	file, err := file.ReadFile("data.json")
 	if err != nil {
 		return &Storage{
-			Bins:      *bins.NewBinList(),
+			Bins:      bins.NewBinList(),
 			UpdatedAt: time.Now(),
 		}
 	}
