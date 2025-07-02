@@ -2,7 +2,6 @@ package storage
 
 import (
 	"encoding/json"
-	"fmt"
 	"struct/bins"
 	"time"
 
@@ -17,16 +16,22 @@ type Db interface {
 type Storage struct {
 	Bins      *bins.BinList `json:"bins"`
 	UpdatedAt time.Time     `json:"updatedAt"`
-	db        Db
 }
 
-func NewStorage(db Db) *Storage {
+type StorageWithDb struct {
+	Storage
+	db Db
+}
+
+func NewStorage(db Db) *StorageWithDb {
 	file, err := db.Read()
 	if err != nil {
-		return &Storage{
-			Bins:      bins.NewBinList(),
-			UpdatedAt: time.Now(),
-			db:        db,
+		return &StorageWithDb{
+			Storage: Storage{
+				Bins:      bins.NewBinList(),
+				UpdatedAt: time.Now(),
+			},
+			db: db,
 		}
 	}
 
@@ -35,13 +40,23 @@ func NewStorage(db Db) *Storage {
 	err = json.Unmarshal(file, &storage)
 	if err != nil {
 		color.Red("Не удалось разобрать файл data.json")
+		return &StorageWithDb{
+			Storage: Storage{
+				Bins:      bins.NewBinList(),
+				UpdatedAt: time.Now(),
+			},
+			db: db,
+		}
 	}
 
-	return &storage
+	return &StorageWithDb{
+		Storage: storage,
+		db:      db,
+	}
 }
 
-func (st *Storage) ToBytes() ([]byte, error) {
-	file, err := json.Marshal(st)
+func (st *StorageWithDb) ToBytes() ([]byte, error) {
+	file, err := json.Marshal(st.Storage)
 	if err != nil {
 		return nil, err
 	}
@@ -49,11 +64,11 @@ func (st *Storage) ToBytes() ([]byte, error) {
 	return file, nil
 }
 
-func (st *Storage) SaveInfo() {
+func (st *StorageWithDb) SaveInfo() {
 	data, err := st.ToBytes()
 	if err != nil {
 		color.Red("Не удалось преобразовать")
 	}
-	fmt.Println(data)
+
 	st.db.Write(data)
 }
