@@ -10,7 +10,8 @@ import (
 func main() {
 	bin := bins.NewBin("", false, time.Now(), "")
 	fileDb := file.NewFileDb("data.json")
-	storage := storage.NewStorage(fileDb)
+	binList := bins.NewBinList()
+	storage := storage.NewStorage(fileDb, binList)
 	storage.Bins.AddBin(*bin)
 	storage.SaveInfo()
 }

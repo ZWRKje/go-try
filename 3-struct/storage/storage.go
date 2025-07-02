@@ -13,9 +13,13 @@ type Db interface {
 	Write([]byte)
 }
 
+type IBinList interface {
+	AddBin(bins.Bin)
+}
+
 type Storage struct {
-	Bins      *bins.BinList `json:"bins"`
-	UpdatedAt time.Time     `json:"updatedAt"`
+	Bins      IBinList  `json:"bins"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 type StorageWithDb struct {
@@ -23,12 +27,12 @@ type StorageWithDb struct {
 	db Db
 }
 
-func NewStorage(db Db) *StorageWithDb {
+func NewStorage(db Db, bins IBinList) *StorageWithDb {
 	file, err := db.Read()
 	if err != nil {
 		return &StorageWithDb{
 			Storage: Storage{
-				Bins:      bins.NewBinList(),
+				Bins:      bins,
 				UpdatedAt: time.Now(),
 			},
 			db: db,
@@ -42,7 +46,7 @@ func NewStorage(db Db) *StorageWithDb {
 		color.Red("Не удалось разобрать файл data.json")
 		return &StorageWithDb{
 			Storage: Storage{
-				Bins:      bins.NewBinList(),
+				Bins:      bins,
 				UpdatedAt: time.Now(),
 			},
 			db: db,
