@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"struct/api"
 	"struct/bins"
 	"struct/file"
 	"struct/storage"
@@ -14,4 +16,5 @@ func main() {
 	storage := storage.NewStorage(fileDb, binList)
 	storage.Bins.AddBin(*bin)
 	storage.SaveInfo()
+	fmt.Println(api.Api())
 }

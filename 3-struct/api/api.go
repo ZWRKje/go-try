@@ -1,3 +1,5 @@
 package api
 
-func api() {}
+func Api() string {
+	return ""
+}
