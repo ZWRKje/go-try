@@ -2,24 +2,31 @@ package storage
 
 import (
 	"encoding/json"
+	"fmt"
 	"struct/bins"
-	"struct/file"
 	"time"
 
 	"github.com/fatih/color"
 )
 
+type Db interface {
+	Read() ([]byte, error)
+	Write([]byte)
+}
+
 type Storage struct {
 	Bins      *bins.BinList `json:"bins"`
 	UpdatedAt time.Time     `json:"updatedAt"`
+	db        Db
 }
 
-func NewStorage() *Storage {
-	file, err := file.ReadFile("data.json")
+func NewStorage(db Db) *Storage {
+	file, err := db.Read()
 	if err != nil {
 		return &Storage{
 			Bins:      bins.NewBinList(),
 			UpdatedAt: time.Now(),
+			db:        db,
 		}
 	}
 
@@ -47,6 +54,6 @@ func (st *Storage) SaveInfo() {
 	if err != nil {
 		color.Red("Не удалось преобразовать")
 	}
-
-	file.WriteFile(data, "data.json")
+	fmt.Println(data)
+	st.db.Write(data)
 }

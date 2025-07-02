@@ -1,6 +1,8 @@
 package bins
 
-import "time"
+import (
+	"time"
+)
 
 type Bin struct {
 	Id        string
@@ -23,5 +25,9 @@ func NewBin(id string, private bool, createdAt time.Time, name string) *Bin {
 }
 
 func NewBinList() *BinList {
-	return &BinList{}
+	return &BinList{Bins: []Bin{}}
+}
+
+func (list *BinList) AddBin(newBin Bin) {
+	list.Bins = append(list.Bins, newBin)
 }
