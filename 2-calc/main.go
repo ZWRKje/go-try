@@ -7,11 +7,22 @@ import (
 	"strings"
 )
 
+var operations = map[string]func([]int) float64{
+	"AVG": avg,
+	"SUM": sum,
+	"MED": med,
+}
+
 func main() {
 	op := inputOperation()
 	nums := inputNumbers()
 
-	res := calculateOperation(op, nums)
+	operation := operations[op]
+	var res float64 = 0
+
+	if operation != nil {
+		res = operation(nums)
+	}
 
 	fmt.Printf("Calculation result:%f", res)
 }
@@ -60,19 +71,6 @@ func stringsToInts(strings []string) ([]int, error) {
 		nums = append(nums, num)
 	}
 	return nums, nil
-}
-
-func calculateOperation(op string, nums []int) float64 {
-	switch op {
-	case "AVG":
-		return avg(nums)
-	case "SUM":
-		return sum(nums)
-	case "MED":
-		return med(nums)
-	default:
-		return float64(nums[0])
-	}
 }
 
 func avg(nums []int) float64 {
